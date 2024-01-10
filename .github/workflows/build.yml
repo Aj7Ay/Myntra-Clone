@@ -40,4 +40,9 @@ jobs:
         env:
           DOCKER_CLI_ACI: 1
 
+      - name: Docker Scout Image Scan
+        run: |
+          docker-scout quickview sevenajay/myntra:latest
+          docker-scout cves sevenajay/myntra:latest
+
       
