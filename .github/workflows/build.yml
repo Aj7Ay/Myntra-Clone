@@ -1,17 +1,18 @@
-name: Build,Analyze,scan
+name: Build, Analyze, and Scan
 on:
   push:
     branches:
       - main
 jobs:
   build-analyze-scan:
-    name: Build
+    name: Build, Analyze, and Scan
     runs-on: [self-hosted]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
       - name: Build and analyze with SonarQube
         uses: sonarsource/sonarqube-scan-action@master
         env:
@@ -20,5 +21,12 @@ jobs:
 
       - name: NPM Install
         run: npm install # Add your specific npm install command
+
+      - name: Docker Login
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Docker Scout Scan
+        run: docker scout quickview fs://.
+
 
       
